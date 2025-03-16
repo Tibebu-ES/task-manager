@@ -21,4 +21,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 
+Route::get('/tasks',\App\Livewire\Tasks\TasksList::class)->name('tasks.index')->middleware('auth');
+
 require __DIR__.'/auth.php';
