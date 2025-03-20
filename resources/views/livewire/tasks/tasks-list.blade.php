@@ -36,7 +36,7 @@
 
     <table class="w-full border-collapse border border-gray-300">
         <thead>
-        <tr class="bg-gray-200">
+        <tr class="bg-accent  text-accent-foreground">
             <th class="border border-gray-300 px-4 py-2">Title</th>
             <th class="border border-gray-300 px-4 py-2">Status</th>
             <th class="border border-gray-300 px-4 py-2">Priority</th>
