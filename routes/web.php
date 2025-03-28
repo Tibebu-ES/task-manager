@@ -3,6 +3,8 @@
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
+use App\Livewire\TaskCategories\TaskCategoriesList;
+use App\Livewire\Tasks\TasksList;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 
-Route::get('/tasks',\App\Livewire\Tasks\TasksList::class)->name('tasks.index')->middleware('auth');
+Route::get('/tasks', TasksList::class)->name('tasks.index')->middleware('auth');
+Route::get('/categories', TaskCategoriesList::class)->name('categories.index')->middleware('auth');
 
 require __DIR__.'/auth.php';
