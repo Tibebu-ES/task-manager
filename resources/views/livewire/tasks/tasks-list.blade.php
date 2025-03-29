@@ -52,6 +52,17 @@
                     @endif
                 @endif
             </th>
+            <!-- Sortable Completed Date Column -->
+            <th class="border border-gray-300 px-4 py-2 cursor-pointer" wire:click="sortBy('completed_date')">
+                Completed Date
+                @if ($sortField == 'completed_date')
+                    @if ($sortDirection == 'asc')
+                        <span>&#x2191;</span> <!-- Ascending arrow -->
+                    @else
+                        <span>&#x2193;</span> <!-- Descending arrow -->
+                    @endif
+                @endif
+            </th>
             <th class="border border-gray-300 px-4 py-2">Actions</th>
         </tr>
         </thead>
@@ -74,6 +85,7 @@
                 </td>
 
                 <td class="border border-gray-300 px-4 py-2">{{ $task->due_date->format('Y-m-d') }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ $task->completed_date?->format('Y-m-d') }}</td>
 
                 {{--actions--}}
                 <td class="border border-gray-300 px-4 py-2">

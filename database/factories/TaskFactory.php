@@ -20,13 +20,16 @@ class TaskFactory extends Factory
      */
     public function definition(): array
     {
+        $status = $this->faker->randomElement(TaskStatus::values());
+        $dueDate = $this->faker->dateTimeBetween('+10 day', '+1 year');
         return [
             'user_id' => User::factory(),
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraph(),
-            'status' => $this->faker->randomElement(TaskStatus::values()),
+            'status' => $status,
             'priority' => $this->faker->randomElement(TaskPriority::values()),
-            'due_date' => $this->faker->dateTimeBetween('+1 day', '+1 year')
+            'due_date' => $dueDate,
+            'completed_date' => $status === TaskStatus::Completed->value ? (clone $dueDate)->modify('-1 day') : null,
         ];
     }
 }

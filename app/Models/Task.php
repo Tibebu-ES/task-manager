@@ -19,13 +19,15 @@ class Task extends Model
         'due_date',
         'priority',
         'status',
-        'task_category_id'
+        'task_category_id',
+        'completed_date'
     ];
 
     protected $casts = [
         'due_date' => 'datetime',
         'priority' => TaskPriority::class,
         'status' => TaskStatus::class,
+        'completed_date' => 'datetime'
     ];
 
     public function user(): BelongsTo

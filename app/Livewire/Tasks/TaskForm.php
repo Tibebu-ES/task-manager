@@ -47,6 +47,8 @@ class TaskForm extends Component
     {
         $this->validate();
         if($this->isEditing) {
+            // Check if the status has changed
+            $statusChangedToCompleted = $this->status->value === TaskStatus::Completed->value && $this->task->status !== TaskStatus::Completed->value;
             //updating an existing task
             $this->task->update([
                 'title' => $this->title,
@@ -55,6 +57,7 @@ class TaskForm extends Component
                 'priority' => $this->priority,
                 'due_date' => $this->due_date,
                 'task_category_id' => $this->task_category_id,
+                'completed_date' => $statusChangedToCompleted ? now() : ($this->status->value !== TaskStatus::Completed->value ? null : $this->task->completed_date),
             ]);
         }else{
             //creating a new task
