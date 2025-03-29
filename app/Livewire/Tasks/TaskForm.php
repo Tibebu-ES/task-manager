@@ -17,6 +17,7 @@ class TaskForm extends Component
     public $status = TaskStatus::New->value; //default status
     public $priority = TaskPriority::Low->value; //default priority
     public $due_date;
+    public $task_category_id;
     public $showModal = false; // controls the modal visibility
 
     protected $rules = [
@@ -25,6 +26,7 @@ class TaskForm extends Component
         'status' => 'required|in:new,in_progress,completed',
         'priority' => 'required|in:low,medium,high',
         'due_date' => 'required|date|after:today',
+        'task_category_id' => 'nullable|exists:task_categories,id',
     ];
 
     public function mount(?Task $task = null): void
@@ -37,6 +39,7 @@ class TaskForm extends Component
             $this->priority = $task->priority;
             $this->due_date = $task->due_date?->format('Y-m-d');
             $this->isEditing = (bool)$task->id;
+            $this->task_category_id = $task->taskCategory?->id;
         }
     }
 
@@ -50,7 +53,8 @@ class TaskForm extends Component
                 'description' => $this->description,
                 'status' => $this->status,
                 'priority' => $this->priority,
-                'due_date' => $this->due_date
+                'due_date' => $this->due_date,
+                'task_category_id' => $this->task_category_id,
             ]);
         }else{
             //creating a new task
@@ -59,7 +63,8 @@ class TaskForm extends Component
                 'description' => $this->description,
                 'status' => $this->status,
                 'priority' => $this->priority,
-                'due_date' => $this->due_date
+                'due_date' => $this->due_date,
+                'task_category_id' => $this->task_category_id,
             ]);
         }
         $this->dispatch('taskUpdated'); // Notify other components
@@ -73,7 +78,7 @@ class TaskForm extends Component
         if($this->isEditing) {
             $this->reset(['showModal']);
         }else{
-            $this->reset(['task','title', 'description', 'status', 'priority', 'due_date', 'showModal', 'isEditing']);
+            $this->reset(['task','title', 'description', 'status', 'priority', 'due_date', 'showModal', 'isEditing', 'task_category_id']);
         }
 
     }
@@ -81,6 +86,8 @@ class TaskForm extends Component
 
     public function render()
     {
-        return view('livewire.tasks.task-form');
+        return view('livewire.tasks.task-form',[
+            'categories' => Auth::user()->taskCategories()->get(),
+        ]);
     }
 }

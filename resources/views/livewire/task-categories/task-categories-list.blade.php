@@ -10,6 +10,7 @@
         <thead>
         <tr class="bg-accent  text-accent-foreground">
             <th class="border border-gray-300 px-4 py-2">Name</th>
+            <th class="border border-gray-300 px-4 py-2">Tasks</th>
             <th class="border border-gray-300 px-4 py-2">Description</th>
             <th class="border border-gray-300 px-4 py-2">Actions</th>
         </tr>
@@ -18,6 +19,7 @@
         @foreach ($categories as $category)
             <tr wire:key="{{$category->id }}">
                 <td class="border border-gray-300 px-4 py-2">{{ $category->name }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ count($category->tasks) }}</td>
                 <td class="border border-gray-300 px-4 py-2">{{ $category->description }}</td>
 
 

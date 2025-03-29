@@ -38,6 +38,7 @@
         <thead>
         <tr class="bg-accent  text-accent-foreground">
             <th class="border border-gray-300 px-4 py-2">Title</th>
+            <th class="border border-gray-300 px-4 py-2">Category</th>
             <th class="border border-gray-300 px-4 py-2">Status</th>
             <th class="border border-gray-300 px-4 py-2">Priority</th>
             <!-- Sortable Due Date Column -->
@@ -58,6 +59,7 @@
         @foreach ($tasks as $task)
             <tr wire:key="{{$task->id }}">
                 <td class="border border-gray-300 px-4 py-2">{{ $task->title }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ $task->taskCategory?->name }}</td>
                 <td class="border border-gray-300 px-4 py-2">{{ $task->status->label()}}</td>
 
                 <!-- Priority Column with Conditional Styling -->

@@ -19,6 +19,13 @@ class Task extends Model
         'due_date',
         'priority',
         'status',
+        'task_category_id'
+    ];
+
+    protected $casts = [
+        'due_date' => 'datetime',
+        'priority' => TaskPriority::class,
+        'status' => TaskStatus::class,
     ];
 
     public function user(): BelongsTo
@@ -26,9 +33,8 @@ class Task extends Model
         return $this->belongsTo(User::class);
     }
 
-    protected $casts = [
-        'due_date' => 'datetime',
-        'priority' => TaskPriority::class,
-        'status' => TaskStatus::class,
-    ];
+    public function taskCategory(): BelongsTo
+    {
+        return $this->belongsTo(TaskCategory::class);
+    }
 }

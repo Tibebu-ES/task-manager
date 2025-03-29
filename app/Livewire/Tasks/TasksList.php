@@ -64,6 +64,7 @@ class TasksList extends Component
 
         // Apply sorting and pagination
         $tasks = $tasksQuery->orderBy($this->sortField, $this->sortDirection)
+            ->with('taskCategory')
             ->paginate(10);
 
         $this->resetPage();//reset back to page 1 after filtering and sorting

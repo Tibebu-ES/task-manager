@@ -15,7 +15,10 @@ class TaskCategoriesList extends Component
     public function render()
     {
         return view('livewire.task-categories.task-categories-list',[
-            'categories' => Auth::user()->taskCategories()->orderBy('created_at','desc')->paginate(10)
+            'categories' => Auth::user()->taskCategories()
+                ->orderBy('created_at','desc')
+                ->with('tasks')
+                ->paginate(10)
         ]);
     }
 

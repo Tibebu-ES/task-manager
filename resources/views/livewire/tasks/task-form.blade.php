@@ -23,6 +23,14 @@
                 <flux:error name="title"/>
             </flux:field>
 
+            <flux:select  wire:model="task_category_id" label="Category" placeholder="Choose category...">
+                <flux:select.option >Uncategorized</flux:select.option>
+                @foreach($categories as $option)
+                    <flux:select.option value="{{$option->id}}">{{$option->name}}</flux:select.option>
+                @endforeach
+                <flux:error name="task_category_id"/>
+            </flux:select>
+
             <flux:select wire:model="status" label="Status">
                 @foreach(TaskStatus::cases() as $option)
                     <flux:select.option value="{{$option}}">{{$option->label()}}</flux:select.option>
