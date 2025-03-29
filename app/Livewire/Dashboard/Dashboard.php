@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Dashboard;
 
 use App\Enums\TaskPriority;
 use App\Enums\TaskStatus;
@@ -45,6 +45,6 @@ class Dashboard extends Component
 
     public function render()
     {
-        return view('livewire.dashboard');
+        return view('livewire.dashboard.dashboard');
     }
 }
