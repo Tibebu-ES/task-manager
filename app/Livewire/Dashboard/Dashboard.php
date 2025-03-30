@@ -5,10 +5,12 @@ namespace App\Livewire\Dashboard;
 use App\Enums\TaskPriority;
 use App\Enums\TaskStatus;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class Dashboard extends Component
 {
+    public $year;
     public $completedTasksCount;
     public $completedTasksLowPriorityCount;
     public $completedTasksMediumPriorityCount;
@@ -23,28 +25,69 @@ class Dashboard extends Component
     public $inProgressTasksMediumPriorityCount;
     public $inProgressTasksHighPriorityCount;
 
+
+
     public function mount()
     {
-        $this->completedTasksLowPriorityCount = Auth::user()->tasks()->where('status', TaskStatus::Completed)->where('priority',TaskPriority::Low)->count();
-        $this->completedTasksMediumPriorityCount = Auth::user()->tasks()->where('status', TaskStatus::Completed)->where('priority',TaskPriority::Medium)->count();
-        $this->completedTasksHighPriorityCount = Auth::user()->tasks()->where('status', TaskStatus::Completed)->where('priority',TaskPriority::High)->count();
-        $this->completedTasksCount = $this->completedTasksLowPriorityCount + $this->completedTasksMediumPriorityCount + $this->completedTasksHighPriorityCount;
+        $this->year = now()->format('Y'); // Defaults to the current year
 
-        $this->newTasksLowPriorityCount = Auth::user()->tasks()->where('status', TaskStatus::New)->where('priority',TaskPriority::Low)->count();
-        $this->newTasksMediumPriorityCount = Auth::user()->tasks()->where('status', TaskStatus::New)->where('priority',TaskPriority::Medium)->count();
-        $this->newTasksHighPriorityCount = Auth::user()->tasks()->where('status', TaskStatus::New)->where('priority',TaskPriority::High)->count();
-        $this->newTasksCount = $this->newTasksLowPriorityCount + $this->newTasksMediumPriorityCount + $this->newTasksHighPriorityCount;
 
-        $this->inProgressTasksLowPriorityCount = Auth::user()->tasks()->where('status', TaskStatus::InProgress)->where('priority',TaskPriority::Low)->count();
-        $this->inProgressTasksMediumPriorityCount = Auth::user()->tasks()->where('status', TaskStatus::InProgress)->where('priority',TaskPriority::Medium)->count();
-        $this->inProgressTasksHighPriorityCount = Auth::user()->tasks()->where('status', TaskStatus::InProgress)->where('priority',TaskPriority::High)->count();
-
-        $this->inProgressTasksCount = $this->inProgressTasksLowPriorityCount + $this->inProgressTasksMediumPriorityCount + $this->inProgressTasksHighPriorityCount;
 
     }
 
+    public function loadData()
+    {
+        // Query tasks completed grouped by  priority
+        $tasksCompleted = Auth::user()->tasks()->select(
+            'priority', // Include task priority
+            DB::raw('COUNT(*) as count') // Count tasks
+        )
+            ->where('status', TaskStatus::Completed->value) // Only completed tasks
+            ->where(DB::raw("strftime('%Y', completed_date)"), $this->year) // Filter by the specified year
+            ->groupBy('priority') // Group by  priority
+            ->get();
+
+        $this->completedTasksCount = $tasksCompleted->sum('count');
+        $this->completedTasksHighPriorityCount = $tasksCompleted->where('priority', TaskPriority::High->value)->sum('count');
+        $this->completedTasksMediumPriorityCount = $tasksCompleted->where('priority', TaskPriority::Medium->value)->sum('count');
+        $this->completedTasksLowPriorityCount = $tasksCompleted->where('priority', TaskPriority::Low->value)->sum('count');
+
+        // Query tasks in progress grouped by  priority
+        $tasksInProgress = Auth::user()->tasks()->select(
+            'priority', // Include task priority
+            DB::raw('COUNT(*) as count') // Count tasks
+        )
+            ->where('status', TaskStatus::InProgress->value) // Only completed tasks
+            ->where(DB::raw("strftime('%Y', created_at)"), $this->year) // Filter by the specified year
+            ->groupBy('priority') // Group by  priority
+            ->get();
+
+        $this->inProgressTasksCount = $tasksInProgress->sum('count');
+        $this->inProgressTasksHighPriorityCount = $tasksInProgress->where('priority', TaskPriority::High->value)->sum('count');
+        $this->inProgressTasksMediumPriorityCount = $tasksInProgress->where('priority', TaskPriority::Medium->value)->sum('count');
+        $this->inProgressTasksLowPriorityCount = $tasksInProgress->where('priority', TaskPriority::Low->value)->sum('count');
+
+        // Query new tasks  grouped by  priority
+        $newTasks = Auth::user()->tasks()->select(
+            'priority', // Include task priority
+            DB::raw('COUNT(*) as count') // Count tasks
+        )
+            ->where('status', TaskStatus::New->value) // Only completed tasks
+            ->where(DB::raw("strftime('%Y', created_at)"), $this->year) // Filter by the specified year
+            ->groupBy('priority') // Group by  priority
+            ->get();
+        $this->newTasksCount = $newTasks->sum('count');
+        $this->newTasksHighPriorityCount = $newTasks->where('priority', TaskPriority::High->value)->sum('count');
+        $this->newTasksMediumPriorityCount = $newTasks->where('priority', TaskPriority::Medium->value)->sum('count');
+        $this->newTasksLowPriorityCount = $newTasks->where('priority', TaskPriority::Low->value)->sum('count');
+
+
+    }
+
+
     public function render()
     {
+        $this->loadData();
         return view('livewire.dashboard.dashboard');
     }
 }

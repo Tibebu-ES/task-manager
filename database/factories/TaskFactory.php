@@ -21,7 +21,12 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         $status = $this->faker->randomElement(TaskStatus::values());
-        $dueDate = $this->faker->dateTimeBetween('+10 day', '+1 year');
+        if ($status === TaskStatus::Completed->value) {
+            $dueDate = $this->faker->dateTimeBetween('-1 year', 'now');
+        }else{
+            $dueDate = $this->faker->dateTimeBetween('+10 day', '+1 year');
+        }
+
         return [
             'user_id' => User::factory(),
             'title' => $this->faker->sentence(),
