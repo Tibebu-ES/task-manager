@@ -32,6 +32,7 @@ class TasksList extends Component
     public function delete(Task $task)
     {
         $task->delete();
+        $this->dispatch('showToast', 'Task deleted !');
     }
 
     public function countAppliedFilters()

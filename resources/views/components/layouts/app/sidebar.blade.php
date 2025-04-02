@@ -118,6 +118,7 @@
                 </flux:menu>
             </flux:dropdown>
         </flux:header>
+        <livewire:notification.toast />
 
         {{ $slot }}
 

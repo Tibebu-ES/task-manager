@@ -26,5 +26,6 @@ class TaskCategoriesList extends Component
     public function delete(TaskCategory $category)
     {
         $category->delete();
+        $this->dispatch('showToast', 'Category deleted !');
     }
 }

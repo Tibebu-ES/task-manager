@@ -70,6 +70,8 @@ class TaskForm extends Component
                 'task_category_id' => $this->task_category_id,
             ]);
         }
+        $toastMessage = $this->isEditing ? 'Task updated !' : 'Task created !';
+        $this->dispatch('showToast', $toastMessage);
         $this->dispatch('taskUpdated'); // Notify other components
         $this->resetForm();
 

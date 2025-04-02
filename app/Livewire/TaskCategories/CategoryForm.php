@@ -47,7 +47,11 @@ class CategoryForm extends Component
                 'description' => $this->description,
             ]);
         }
+        $toastMessage = $this->isEditing ? 'Category updated !' : 'Category created !';
+        $this->dispatch('showToast', $toastMessage);
         $this->dispatch('categoryUpdated');
+
+
 
         $this->resetForm();
 
